@@ -84,22 +84,23 @@ Note that if you do this, `logparser` will not attempt to rewrite the database
 
 ## Todos
 
-+ [X] remove pandas dep and only use pure python
++ [x] remove pandas dep and only use pure python
 
 + [ ] support other formats, not just Nginx
-  + [ ] apache  
+  + [ ] apache 
   + [ ] [morgan](https://www.npmjs.com/package/morgan)
   
-+ [X] support writing to disk for the sqlite3 database, not just to
++ [x] support writing to disk for the sqlite3 database, not just to
       memory
       
 + [ ] write tests 
   + [ ] split the `logparser.py` file up into separate chunks 
 
-+ [ ] Ability to process multiple SQL commands in a text file,
++ [x] Ability to process multiple SQL commands in a text file,
       separated by line
       
-+ [ ] infer the table so I don't have to specify it everytime
++ [ ] infer the table (e.g. `FROM logs`) so I don't have to specify it
+      everytime 
 
 
 ## License
