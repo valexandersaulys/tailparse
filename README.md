@@ -23,11 +23,11 @@ privileges.
 
 ## Usage
 
-`python3 logparser.py -q <sqlite-query> your.logs`
+`tailparser -q <sqlite-query> your.logs`
 
 Help:
 ```
-$ ./logparser.py --help
+$ tailparser --help
 usage: logparser.py [-h] [-p] [-i INPUT_FORMAT] -q QUERY [-r MAX_ROWS] [-s SAVE_DB] LOGS_TO_QUERY
 
 Process some SQL
@@ -57,13 +57,13 @@ options:
 It can help to write the SQL database to disk instead of reading from
 memory. This can be done with the `-s` or `--save-db` arguments:
 ```
-$ time ./logparser.py -s tmp.sqlite3.db -q "SELECT COUNT(*) FROM logs" sample.logs
+$ time tailparser -s tmp.sqlite3.db -q "SELECT COUNT(*) FROM logs" sample.logs
 ['COUNT(*)']
 [(100090,)]
 real    0m1.038s
 user    0m0.850s
 sys     0m0.088s
-$ time ./logparser.py -s tmp.sqlite3.db -q "SELECT COUNT(*) FROM logs" sample.logs
+$ time tailparser -s tmp.sqlite3.db -q "SELECT COUNT(*) FROM logs" sample.logs
 ['COUNT(*)']
 [(100090,)]
 real    0m0.609s
@@ -71,7 +71,7 @@ user    0m0.545s
 sys     0m0.064s
 
 # and without any caching
-$ time ./logparser.py -q "SELECT COUNT(*) FROM logs" sample.logs
+$ time tailparser -q "SELECT COUNT(*) FROM logs" sample.logs
 ['COUNT(*)']
 [(100090,)]
 real    0m0.902s
