@@ -50,3 +50,8 @@ options:
       separated by line
       
 + [ ] infer the table so I don't have to specify it everytime
+
+
+## License
+
+[GPL-v3](https://www.gnu.org/licenses/gpl-3.0.en.html)
