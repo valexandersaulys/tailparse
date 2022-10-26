@@ -83,13 +83,20 @@ def logparse(parser):
         "--input-format",
         default="nginx",
         required=False,
-        help="The format of the log we're processing. Defaults to 'nginx'. Options include ['nginx']",
+        help="""
+        The format of the log we're processing. Defaults to 'nginx'. Options 
+        include ['nginx']
+        """,
     )
     parser.add_argument(
         "-q",
         "--query",
-        required=True,
-        help="The query to execute. Don't include any 'FROM' statement as this is added automatically.",
+        required=False,
+        help="""
+        The query to execute. Don't include any 'FROM' statement as this is 
+        added automatically. If not included, make sure to include a -f/--file 
+        arugmenet
+        """,
     )
     parser.add_argument(
         "-r",
@@ -107,13 +114,23 @@ def logparse(parser):
         not saving it and using ':memory:' instead. If the database exists, 
         then the log file will not be used to populate it and instead it will 
         be read from. This can be helpful if you're running a lot of queries
-        as the log file doesn't need to be re-parsed everytime.""",
+        as the log file doesn't need to be re-parsed everytime.
+        """,
     )
     parser.add_argument(
         "log_file_path",
         metavar="LOGS_TO_QUERY",
         type=str,
         help="The path to the input log we're processing. If not present, will use stdin.",
+    )
+    parser.add_argument(
+        "-f",
+        "--file",
+        type=str,
+        help="""
+        Execute multiple queries contained with a file. Can be used in place 
+        of -q/--query
+        """,
     )
     args = parser.parse_args()
 
@@ -138,17 +155,36 @@ def logparse(parser):
         conn.commit()
 
     # execute the passed query
-    query = " ".join(args.query.split("\n"))
-    executed_query = curr.execute(query)
-    if args.max_rows == 0:
-        tmpt = list(executed_query)
-    else:
-        tmpt = list(row for i, row in enumerate(executed_query) if i < args.max_rows)
+    if args.query:
+        query = " ".join(args.query.split("\n"))
+        executed_query = curr.execute(query)
+        if args.max_rows == 0:
+            tmpt = list(executed_query)
+        else:
+            tmpt = list(
+                row for i, row in enumerate(executed_query) if i < args.max_rows
+            )
 
-    names = list(map(lambda x: x[0], curr.description))
+        names = list(map(lambda x: x[0], curr.description))
+        pp.pprint(names)
+        pp.pprint(tmpt)
 
-    pp.pprint(names)
-    pp.pprint(tmpt)
+    elif args.file:
+        print("")
+        with open(args.file, "r") as f:
+            for query in f.readlines():
+                executed_query = curr.execute(query)
+                if args.max_rows == 0:
+                    tmpt = list(executed_query)
+                else:
+                    tmpt = list(
+                        row for i, row in enumerate(executed_query) if i < args.max_rows
+                    )
+                names = list(map(lambda x: x[0], curr.description))
+                print(query.strip())
+                pp.pprint(names)
+                pp.pprint(tmpt)
+                print("")
 
 
 if __name__ == "__main__":
