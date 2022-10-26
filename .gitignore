@@ -4,4 +4,8 @@
 *sqlite3
 *sql
 *sqlite
+*.db
 \#*\#
+build/
+dist/
+tailparser.egg-info/

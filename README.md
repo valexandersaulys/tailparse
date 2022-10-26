@@ -1,9 +1,24 @@
-# `logparser`
+# `tailparser`
 
 Meant to mimic, sort of, how the OG [logparser for MS
-Server](https://en.wikipedia.org/wiki/Logparser)
+Server](https://en.wikipedia.org/wiki/Logparser) worked. 
 
-Very much a work-in-progress atm
+Very much a work-in-progress atm. Goal is to make this a standalone
+python executable for deployment on servers. Will probably have to
+change the name to make space on package repos. 
+
+## Installation
+
+`tailparser` has no dependencies to install. It only works with
+python 3 and has only been tested in python 3.10. Presumably it would
+work as far back as python 3.6.
+```
+python3 setup.py install --user
+```
+
+This will install it in your home directory
+(i.e. `home/<username>/.local/bin/`) and doesn't require sudo
+privileges. 
 
 
 ## Usage
@@ -13,7 +28,7 @@ Very much a work-in-progress atm
 Help:
 ```
 $ ./logparser.py --help
-usage: logparser.py [-h] [-p] [-i INPUT_FORMAT] -q QUERY [-r MAX_ROWS] [-c MAX_COLS] LOGS_TO_QUERY
+usage: logparser.py [-h] [-p] [-i INPUT_FORMAT] -q QUERY [-r MAX_ROWS] [-s SAVE_DB] LOGS_TO_QUERY
 
 Process some SQL
 
@@ -29,18 +44,53 @@ options:
                         The query to execute. Don't include any 'FROM' statement as this is added automatically.
   -r MAX_ROWS, --max-rows MAX_ROWS
                         Number of max rows to print. Defaults to 20. Put 0 to print all.
-  -c MAX_COLS, --max-cols MAX_COLS
-                        Number of max columns to print. Defaults to 10. Put 0 to print all.
+  -s SAVE_DB, --save-db SAVE_DB
+                        Whether to save the resulting SQLite data file. Defaults to not saving it and using ':memory:'
+                        instead. If the database exists, then the log file will not be used to populate it and instead it
+                        will be read from. This can be helpful if you're running a lot of queries as the log file doesn't
+                        need to be re-parsed everytime.
 ```
 
 
+### Caching the database on-disk
+
+It can help to write the SQL database to disk instead of reading from
+memory. This can be done with the `-s` or `--save-db` arguments:
+```
+$ time ./logparser.py -s tmp.sqlite3.db -q "SELECT COUNT(*) FROM logs" sample.logs
+['COUNT(*)']
+[(100090,)]
+real    0m1.038s
+user    0m0.850s
+sys     0m0.088s
+$ time ./logparser.py -s tmp.sqlite3.db -q "SELECT COUNT(*) FROM logs" sample.logs
+['COUNT(*)']
+[(100090,)]
+real    0m0.609s
+user    0m0.545s
+sys     0m0.064s
+
+# and without any caching
+$ time ./logparser.py -q "SELECT COUNT(*) FROM logs" sample.logs
+['COUNT(*)']
+[(100090,)]
+real    0m0.902s
+user    0m0.858s
+sys     0m0.040s
+```
+
+Note that if you do this, `logparser` will not attempt to rewrite the database
+
+
 ## Todos
+
++ [X] remove pandas dep and only use pure python
 
 + [ ] support other formats, not just Nginx
   + [ ] apache  
   + [ ] [morgan](https://www.npmjs.com/package/morgan)
   
-+ [ ] support writing to disk for the sqlite3 database, not just to
++ [X] support writing to disk for the sqlite3 database, not just to
       memory
       
 + [ ] write tests 
