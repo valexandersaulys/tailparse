@@ -42,4 +42,4 @@ def convert_text(filepath, input_format):
     )
     tmp = ", ".join(":%s" % dtype for dtype, _ in dtypes.items())
     insertion_string = "INSERT INTO logs VALUES (%s)" % tmp
-    return L, table_creation_query, insertion_string
+    return L, table_creation_query, insertion_string, dtypes

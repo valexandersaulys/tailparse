@@ -10,3 +10,4 @@ build/
 dist/
 tailparser.egg-info/
 tailparse.egg-info/
+*/__pycache__/
