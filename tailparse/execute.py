@@ -70,11 +70,12 @@ def execute_query(
                     tmpt = list(
                         row for i, row in enumerate(executed_query) if i < max_rows
                     )
-                column_names = list(map(lambda x: x[0], curr.description))
                 to_ret += "> " + query.strip()
                 to_ret += "\n"
-                to_ret += print_output(list_of_results=tmpt, column_names=column_names)
+                to_ret += print_output(
+                    list_of_results=tmpt,
+                    column_names=list(map(lambda x: x[0], curr.description)),
+                )
                 to_ret += "\n\n"
 
-    # remove last \n\n
     return to_ret.strip() + "\n"

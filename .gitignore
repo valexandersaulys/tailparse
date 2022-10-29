@@ -10,4 +10,5 @@ build/
 dist/
 tailparser.egg-info/
 tailparse.egg-info/
-*/__pycache__/
+tailparse/__pycache__/
+tailparse/log_formats/__pycache__/
