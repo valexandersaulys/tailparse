@@ -86,7 +86,11 @@ Note that if you do this, `logparser` will not attempt to rewrite the database
 
 To run tests, at the top level run the following:
 ```
-python -m unittest
+pip install --user coverage
+
+# at the top directory
+coverage run -m unittest
+coverage report --omit=*/tests/*
 ```
 
 
@@ -99,7 +103,7 @@ python -m unittest
   + [X] split the `logparser.py` file up into separate chunks 
   
   + [ ] `tailparse.execute.execute_query`: write integration tests
-        against this and check for the output string
+        against this and check for the output string -- _all for 'nginx'_
         
     + [ ] include `sample.log` via `shuf -n N input > output`
     + [ ] `SELECT * FROM logs LIMIT 1`
