@@ -4,14 +4,14 @@ from distutils.core import setup
 import setuptools
 
 setup(
-    name="tailparser",
+    name="tailparse",
     entry_points={
-        "console_scripts": ["tailparser=tailparser.cli:cli"],
+        "console_scripts": ["tailparse=tailparse.cli:cli"],
     },
     version="0.1",
     description="Log Parser for Nginx logs",
     author="Vincent A. Saulys",
     author_email="vincent@saulys.me",
-    url="https://github.com/valexandersaulys/logparser",
+    url="https://github.com/valexandersaulys/tailparse",
     packages=setuptools.find_packages(),
 )

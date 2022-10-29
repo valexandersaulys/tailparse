@@ -1,4 +1,4 @@
-# `tailparser`
+# `tailparse`
 
 Meant to mimic, sort of, how the OG [logparser for MS
 Server](https://en.wikipedia.org/wiki/Logparser) worked. 
@@ -9,7 +9,7 @@ change the name to make space on package repos.
 
 ## Installation
 
-`tailparser` has no dependencies to install. It only works with
+`tailparse` has no dependencies to install. It only works with
 python 3 and has only been tested in python 3.10. Presumably it would
 work as far back as python 3.6.
 ```
@@ -23,12 +23,12 @@ privileges.
 
 ## Usage
 
-`tailparser -q <sqlite-query> your.logs`
+`tailparse -q <sqlite-query> your.logs`
 
 Help:
 ```
-$ tailparser --help
-usage: logparser.py [-h] [-p] [-i INPUT_FORMAT] -q QUERY [-r MAX_ROWS] [-s SAVE_DB] LOGS_TO_QUERY
+$ tailparse --help
+usage: tailparse [-h] [-p] [-i INPUT_FORMAT] -q QUERY [-r MAX_ROWS] [-s SAVE_DB] LOGS_TO_QUERY
 
 Process some SQL
 
@@ -57,13 +57,13 @@ options:
 It can help to write the SQL database to disk instead of reading from
 memory. This can be done with the `-s` or `--save-db` arguments:
 ```
-$ time tailparser -s tmp.sqlite3.db -q "SELECT COUNT(*) FROM logs" sample.logs
+$ time tailparse -s tmp.sqlite3.db -q "SELECT COUNT(*) FROM logs" sample.logs
 ['COUNT(*)']
 [(100090,)]
 real    0m1.038s
 user    0m0.850s
 sys     0m0.088s
-$ time tailparser -s tmp.sqlite3.db -q "SELECT COUNT(*) FROM logs" sample.logs
+$ time tailparse -s tmp.sqlite3.db -q "SELECT COUNT(*) FROM logs" sample.logs
 ['COUNT(*)']
 [(100090,)]
 real    0m0.609s
@@ -71,7 +71,7 @@ user    0m0.545s
 sys     0m0.064s
 
 # and without any caching
-$ time tailparser -q "SELECT COUNT(*) FROM logs" sample.logs
+$ time tailparse -q "SELECT COUNT(*) FROM logs" sample.logs
 ['COUNT(*)']
 [(100090,)]
 real    0m0.902s
@@ -84,15 +84,17 @@ Note that if you do this, `logparser` will not attempt to rewrite the database
 
 ## Todos
 
++ [ ] write proper contribution guides, especially for new log formats
+
 + [x] remove pandas dep and only use pure python
+
++ [x] support writing to disk for the sqlite3 database, not just to
+      memory 
 
 + [ ] support other formats, not just Nginx
   + [ ] apache 
   + [ ] [morgan](https://www.npmjs.com/package/morgan)
   
-+ [x] support writing to disk for the sqlite3 database, not just to
-      memory
-      
 + [ ] write tests 
   + [ ] split the `logparser.py` file up into separate chunks 
 

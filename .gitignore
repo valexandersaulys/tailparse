@@ -9,3 +9,4 @@
 build/
 dist/
 tailparser.egg-info/
+tailparse.egg-info/
