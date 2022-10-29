@@ -1,4 +1,6 @@
 import argparse
+import sys
+
 from tailparse.logparser import logparse
 
 
@@ -52,15 +54,17 @@ def cli():
         """,
     )
     parser.add_argument(
-        "log_file_path",
-        metavar="LOGS_TO_QUERY",
-        type=str,
+        "log_file",
+        metavar="logs",
+        nargs="?",
+        type=argparse.FileType("r"),
+        default=(None if sys.stdin.isatty() else sys.stdin),
         help="The path to the input log we're processing. If not present, will use stdin.",
     )
     parser.add_argument(
         "-f",
         "--file",
-        type=str,
+        type=argparse.FileType("r"),
         help="""
         Execute multiple queries contained with a file. Can be used in place 
         of -q/--query
@@ -68,7 +72,7 @@ def cli():
     )
     args = parser.parse_args()
     logparse(
-        log_file_path=args.log_file_path,
+        log_file=args.log_file,
         input_format=args.input_format,
         save_db=args.save_db,
         print_columns=args.print_columns,

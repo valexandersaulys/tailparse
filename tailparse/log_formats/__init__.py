@@ -14,22 +14,23 @@ def get_regexp_format(input_format: str):
         )
 
 
-def convert_text(filepath, input_format):
+def convert_text(log_file, input_format):
     regex, type_conversions, dtypes = get_regexp_format(input_format)
     L = []
-    with open(filepath, "r") as f:
-        for line in f.readlines():
-            try:
-                m = re.match(regex, line)
-                tmp_group_dict = m.groupdict()
-                # perform conversions if called for
-                if type_conversions:
-                    tmp_items = tmp_group_dict.items()
-                    for k, v in tmp_items:
-                        tmp_group_dict[k] = dtypes[v] if v in dtypes else str(v)
-                L.append(tmp_group_dict)
-            except:
-                continue
+    for line in log_file.readlines():
+        try:
+            m = re.match(regex, line)
+            tmp_group_dict = m.groupdict()
+            # perform conversions if called for
+            if type_conversions:
+                tmp_items = tmp_group_dict.items()
+                for k, v in tmp_items:
+                    tmp_group_dict[k] = dtypes[v] if v in dtypes else str(v)
+            L.append(tmp_group_dict)
+
+        # skip over any line that doesn't conform
+        except:
+            continue
 
     table_creation_strings = ["%s %s" % (k, v) for k, v in dtypes.items()]
     table_creation_query = """

@@ -1,3 +1,4 @@
+from io import TextIOWrapper, BytesIO
 import os
 import pprint
 import sqlite3
@@ -11,10 +12,10 @@ pp = pprint.PrettyPrinter(indent=2)
 
 
 def execute_query(
-    log_file_path: str = "",
+    log_file: str = "",
     input_format: str = "nginx",
     query: str = "",
-    query_file: str = "",
+    query_file: TextIOWrapper = TextIOWrapper(BytesIO(b"")),
     max_rows: int = 20,
     save_db: str = "",
     print_columns: bool = False,
@@ -22,7 +23,7 @@ def execute_query(
     """
     Execute a query and return as a string
 
-    :param log_file_path: _
+    :param log_file: _
     :param input_format: _
     :param query: _
     :param query_file: _
@@ -32,10 +33,10 @@ def execute_query(
     """
     # massage data into useful python structures
     dict_list, table_creation_query, insertion_string, dtypes = convert_text(
-        filepath=log_file_path, input_format=input_format
+        log_file=log_file, input_format=input_format
     )
 
-    if log_file_path == "":
+    if log_file == "":
         raise ValueError("No Log File Provided")
     if query == "" and query_file == "":
         raise ValueError("Did not pass in a query or query_file")
@@ -72,21 +73,18 @@ def execute_query(
         to_ret += print_output(list_of_results=tmpt, column_names=column_names)
 
     elif query_file:
-        with open(query_file, "r") as f:
-            for query in f.readlines():
-                executed_query = curr.execute(query)
-                if max_rows == 0:
-                    tmpt = list(executed_query)
-                else:
-                    tmpt = list(
-                        row for i, row in enumerate(executed_query) if i < max_rows
-                    )
-                to_ret += "> " + query.strip()
-                to_ret += "\n"
-                to_ret += print_output(
-                    list_of_results=tmpt,
-                    column_names=list(map(lambda x: x[0], curr.description)),
-                )
-                to_ret += "\n\n"
+        for query in query_file.readlines():
+            executed_query = curr.execute(query)
+            if max_rows == 0:
+                tmpt = list(executed_query)
+            else:
+                tmpt = list(row for i, row in enumerate(executed_query) if i < max_rows)
+            to_ret += "> " + query.strip()
+            to_ret += "\n"
+            to_ret += print_output(
+                list_of_results=tmpt,
+                column_names=list(map(lambda x: x[0], curr.description)),
+            )
+            to_ret += "\n\n"
 
     return to_ret.strip() + "\n"

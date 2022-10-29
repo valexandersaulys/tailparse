@@ -94,8 +94,7 @@ coverage report --omit=*/tests/*
 ```
 
 
-## Todos
-
+## Todos  
   
 + [ ] write [proper
       tests](https://docs.python.org/3/library/unittest.html) 
@@ -113,10 +112,18 @@ coverage report --omit=*/tests/*
     + [ ] `SELECT *`: complains before it executes
     + [ ] w/`query_file`: write to `/tmp` and clean up after
     + [ ] w/`save_db`: write to `/tmp` and clean up after
+    + [ ] w/`save_db`: both with stdin and if its a file
     + [ ] w/`print_columns`: as `True`, should print just columns
     
   + [ ] `tailparse.print_output.print_output`: write unit tests
         against this and check for output string
+        
+  + [ ] write testing shell script -- should fail if `mypy` fails or
+        if `coverage` and `mypy` aren't installed
+
++ [ ] update the README to use current version screenshots
+
++ [ ] add `--version` argument
 
 + [ ] write proper contribution guides, especially for new log formats
 
