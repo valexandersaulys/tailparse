@@ -3,14 +3,13 @@
 from distutils.core import setup
 import setuptools
 
-from tailparse import __version__
 
 setup(
     name="tailparse",
     entry_points={
         "console_scripts": ["tailparse=tailparse.cli:cli"],
     },
-    version=__version__,
+    version=0.2,
     description="Log Parser for Nginx logs",
     author="Vincent A. Saulys",
     author_email="vincent@saulys.me",
