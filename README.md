@@ -82,11 +82,44 @@ sys     0m0.040s
 Note that if you do this, `logparser` will not attempt to rewrite the database
 
 
+## Running Tests
+
+To run tests, at the top level run the following:
+```
+python -m unittest
+```
+
+
 ## Todos
+
+  
++ [ ] write [proper
+      tests](https://docs.python.org/3/library/unittest.html) 
+      
+  + [X] split the `logparser.py` file up into separate chunks 
+  
+  + [ ] `tailparse.execute.execute_query`: write integration tests
+        against this and check for the output string
+        
+    + [ ] include `sample.log` via `shuf -n N input > output`
+    + [ ] `SELECT * FROM logs LIMIT 1`
+    + [ ] `SELECT * FROM logs LIMIT 2`
+    + [ ] `SELECT * FROM logs`: stops at 20 by default
+    + [ ] `SELECT * FROM logs`, w/max_rows=0: does not stop at 20
+    + [ ] `SELECT *`: complains before it executes
+    + [ ] w/`query_file`: write to `/tmp` and clean up after
+    + [ ] w/`save_db`: write to `/tmp` and clean up after
+    + [ ] w/`print_columns`: as `True`, should print just columns
+    
+  + [ ] `tailparse.print_output.print_output`: write unit tests
+        against this and check for output string
 
 + [ ] write proper contribution guides, especially for new log formats
 
-+ [x] remove pandas dep and only use pure python
++ [ ] write proper `Make` file to make it easy for people to see whats
+      going on
+
++ [x] remove pandas dependency and only use pure python
 
 + [x] support writing to disk for the sqlite3 database, not just to
       memory 
@@ -94,9 +127,6 @@ Note that if you do this, `logparser` will not attempt to rewrite the database
 + [ ] support other formats, not just Nginx
   + [ ] apache 
   + [ ] [morgan](https://www.npmjs.com/package/morgan)
-  
-+ [ ] write tests 
-  + [ ] split the `logparser.py` file up into separate chunks 
 
 + [x] Ability to process multiple SQL commands in a text file,
       separated by line

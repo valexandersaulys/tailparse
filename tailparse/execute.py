@@ -1,6 +1,7 @@
 import os
 import pprint
 import sqlite3
+import sys
 
 from tailparse.log_formats import convert_text
 from tailparse.print_output import print_output
@@ -15,9 +16,20 @@ def execute_query(
     query: str = "",
     query_file: str = "",
     max_rows: int = 20,
-    save_db: bool = False,
+    save_db: str = "",
     print_columns: bool = False,
 ) -> str:
+    """
+    Execute a query and return as a string
+
+    :param log_file_path: _
+    :param input_format: _
+    :param query: _
+    :param query_file: _
+    :param max_rows: Max rows to display.
+    :param save_db: if a valid path, whether to use an on-disk database for querying.
+    :param print_columns: if True, prints to screen
+    """
     # massage data into useful python structures
     dict_list, table_creation_query, insertion_string, dtypes = convert_text(
         filepath=log_file_path, input_format=input_format
@@ -45,8 +57,7 @@ def execute_query(
         conn.commit()
 
     if print_columns:
-        sys.stdout.write(pp.pformat(dtypes))
-        sys.stdout.write("\n")
+        return pp.pformat(dtypes) + "\n"
 
     to_ret = ""
     # execute the passed query

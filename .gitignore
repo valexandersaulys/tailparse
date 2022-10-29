@@ -12,3 +12,4 @@ tailparser.egg-info/
 tailparse.egg-info/
 tailparse/__pycache__/
 tailparse/log_formats/__pycache__/
+tailparse/tests/__pycache__/

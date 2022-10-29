@@ -12,7 +12,7 @@ def logparse(
     query: str = "",
     query_file: str = "",
     max_rows: int = 20,
-    save_db: bool = False,
+    save_db: str = "",
     print_columns: bool = False,
 ) -> None:
     """
