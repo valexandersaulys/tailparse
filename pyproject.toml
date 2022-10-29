@@ -3,8 +3,8 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "tailparser"
-version = "0.1"
+name = "tailparse"
+version = "0.2"
 authors = [
   { name="Vincent A Saulys", email="vincent@saulys.me" },
 ]
@@ -17,6 +17,9 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 
+[project.entry-points.console_scripts]
+tailparse = "tailparse.cli:cli"
+
 [project.urls]
-"Homepage" = "https://github.com/valexandersaulys/logparser"
-"Bug Tracker" = "https://github.com/valexandersaulys/logparser/issues"
+"Homepage" = "https://github.com/valexandersaulys/tailparse"
+"Bug Tracker" = "https://github.com/valexandersaulys/tailparse/issues"

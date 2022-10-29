@@ -12,7 +12,7 @@ pp = pprint.PrettyPrinter(indent=2)
 
 
 def execute_query(
-    log_file: str = "",
+    log_file: TextIOWrapper = TextIOWrapper(BytesIO(b"")),
     input_format: str = "nginx",
     query: str = "",
     query_file: TextIOWrapper = TextIOWrapper(BytesIO(b"")),
@@ -38,7 +38,7 @@ def execute_query(
 
     if log_file == "":
         raise ValueError("No Log File Provided")
-    if query == "" and query_file == "":
+    if query == "" and query_file == "" and not print_columns:
         raise ValueError("Did not pass in a query or query_file")
 
     # dump to SQLite3
@@ -64,7 +64,10 @@ def execute_query(
     # execute the passed query
     if query:
         query = " ".join(query.split("\n"))
-        executed_query = curr.execute(query)
+        try:
+            executed_query = curr.execute(query)
+        except sqlite3.OperationalError:
+            raise
         if max_rows == 0:
             tmpt = list(executed_query)
         else:
@@ -73,8 +76,13 @@ def execute_query(
         to_ret += print_output(list_of_results=tmpt, column_names=column_names)
 
     elif query_file:
-        for query in query_file.readlines():
-            executed_query = curr.execute(query)
+        for query in query_file.read().split("\n"):
+            if query.strip() == "":
+                continue
+            try:
+                executed_query = curr.execute(query)
+            except sqlite3.OperationalError:
+                raise
             if max_rows == 0:
                 tmpt = list(executed_query)
             else:

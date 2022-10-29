@@ -11,7 +11,7 @@ change the name to make space on package repos.
 
 `tailparse` has no dependencies to install. It only works with
 python 3 and has only been tested in python 3.10. Presumably it would
-work as far back as python 3.6.
+work with any python 3. 
 ```
 python3 setup.py install --user
 ```
@@ -28,12 +28,12 @@ privileges.
 Help:
 ```
 $ tailparse --help
-usage: tailparse [-h] [-p] [-i INPUT_FORMAT] -q QUERY [-r MAX_ROWS] [-s SAVE_DB] LOGS_TO_QUERY
+usage: tailparse [-h] [-p] [-i INPUT_FORMAT] [-q QUERY] [-r MAX_ROWS] [-s SAVE_DB] [-f FILE] [logs]
 
-Process some SQL
+Process logs as if they were SQL.
 
 positional arguments:
-  LOGS_TO_QUERY         The path to the input log we're processing. If not present, will use stdin.
+  logs                  The path to the input log we're processing. If not present, will use stdin.
 
 options:
   -h, --help            show this help message and exit
@@ -41,7 +41,8 @@ options:
   -i INPUT_FORMAT, --input-format INPUT_FORMAT
                         The format of the log we're processing. Defaults to 'nginx'. Options include ['nginx']
   -q QUERY, --query QUERY
-                        The query to execute. Don't include any 'FROM' statement as this is added automatically.
+                        The query to execute. Don't include any 'FROM' statement as this is added automatically. If not
+                        included, make sure to include a -f/--file arugmenet
   -r MAX_ROWS, --max-rows MAX_ROWS
                         Number of max rows to print. Defaults to 20. Put 0 to print all.
   -s SAVE_DB, --save-db SAVE_DB
@@ -49,6 +50,7 @@ options:
                         instead. If the database exists, then the log file will not be used to populate it and instead it
                         will be read from. This can be helpful if you're running a lot of queries as the log file doesn't
                         need to be re-parsed everytime.
+  -f FILE, --file FILE  Execute multiple queries contained with a file. Can be used in place of -q/--query
 ```
 
 
@@ -58,40 +60,62 @@ It can help to write the SQL database to disk instead of reading from
 memory. This can be done with the `-s` or `--save-db` arguments:
 ```
 $ time tailparse -s tmp.sqlite3.db -q "SELECT COUNT(*) FROM logs" sample.logs
-['COUNT(*)']
-[(100090,)]
-real    0m1.038s
-user    0m0.850s
-sys     0m0.088s
+COUNT(*)
+100090
+
+real    0m1.026s
+user    0m0.835s
+sys     0m0.117s
 $ time tailparse -s tmp.sqlite3.db -q "SELECT COUNT(*) FROM logs" sample.logs
-['COUNT(*)']
-[(100090,)]
-real    0m0.609s
-user    0m0.545s
-sys     0m0.064s
+COUNT(*)
+100090
+
+real    0m0.648s
+user    0m0.533s
+sys     0m0.095s
 
 # and without any caching
 $ time tailparse -q "SELECT COUNT(*) FROM logs" sample.logs
-['COUNT(*)']
-[(100090,)]
-real    0m0.902s
-user    0m0.858s
-sys     0m0.040s
+COUNT(*)
+100090
+
+real    0m0.910s
+user    0m0.866s
+sys     0m0.045s
 ```
 
-Note that if you do this, `logparser` will not attempt to rewrite the database
+Note that if you do this, `tailparse` will not attempt to rewrite the database
 
 
 ## Running Tests
 
 To run tests, at the top level run the following:
 ```
-pip install --user coverage
-
-# at the top directory
-coverage run -m unittest
-coverage report --omit=*/tests/*
+./test.sh
 ```
+
+To get coverage reports, which requires the [`coverage`
+module](https://coverage.readthedocs.io/en/6.5.0/), you can run:
+```
+./test.sh -h
+```
+
+While testing relies entirely on `unittest`, which is built-in,
+`coverage` and `mypy` are used to do coverage reports and type
+checking, respectively. `./test.sh` will check for these installs at
+runtime.  
+
+
+## Contributing
+
+Feel free to make a PR! 
+
+Note that this library is trying very hard to avoid any dependencies
+and stay core-python-only. If there is a strong reason to include one,
+please include a reason why.  
+
+`black` is used for all code formatting. Testing will be required for
+any contributions. 
 
 
 ## Todos  
@@ -104,18 +128,17 @@ coverage report --omit=*/tests/*
   + [ ] `tailparse.execute.execute_query`: write integration tests
         against this and check for the output string -- _all for 'nginx'_
         
-    + [ ] include `sample.log` via `shuf -n N input > output`
-    + [ ] `SELECT * FROM logs LIMIT 1`
-    + [ ] `SELECT * FROM logs LIMIT 2`
-    + [ ] `SELECT * FROM logs`: stops at 20 by default
-    + [ ] `SELECT * FROM logs`, w/max_rows=0: does not stop at 20
-    + [ ] `SELECT *`: complains before it executes
-    + [ ] w/`query_file`: write to `/tmp` and clean up after
-    + [ ] w/`save_db`: write to `/tmp` and clean up after
-    + [ ] w/`save_db`: both with stdin and if its a file
-    + [ ] w/`print_columns`: as `True`, should print just columns
+    + [x] include `sample.log` via `shuf -n N input > output`
+    + [x] `SELECT * FROM logs LIMIT 1`
+    + [x] `SELECT * FROM logs LIMIT 2`
+    + [x] `SELECT * FROM logs`: stops at 20 by default
+    + [x] `SELECT * FROM logs`, w/max_rows=0: does not stop at 20
+    + [x] `SELECT *`: complains before it executes
+    + [x] w/`query_file`: write to `/tmp` and clean up after
+    + [x] w/`save_db`: write to `/tmp` and clean up after
+    + [x] w/`print_columns`: as `True`, should print just columns
     
-  + [ ] `tailparse.print_output.print_output`: write unit tests
+  + [x] `tailparse.print_output.print_output`: write unit tests
         against this and check for output string
         
   + [x] write testing shell script -- should fail if `mypy` fails or

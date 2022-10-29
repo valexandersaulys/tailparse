@@ -1,11 +1,17 @@
 import argparse
 import sys
 
-from tailparse.logparser import logparse
+from tailparse import __version__
+from tailparse.execute import execute_query
 
 
 def cli():
     parser = argparse.ArgumentParser(description="Process logs as if they were SQL.")
+    parser.add_argument(
+        "--version",
+        action="version",
+        version="%(prog)s v{version}".format(version=__version__),
+    )
     parser.add_argument(
         "-p",
         "--print",
@@ -71,12 +77,16 @@ def cli():
         """,
     )
     args = parser.parse_args()
-    logparse(
+    if args.log_file is None:
+        sys.stdout.write("ERROR: Must provide log file either as path or via stdin\n")
+        exit(1)
+    text = execute_query(
         log_file=args.log_file,
         input_format=args.input_format,
-        save_db=args.save_db,
-        print_columns=args.print_columns,
         query=args.query,
         query_file=args.file,
         max_rows=int(args.max_rows),
+        save_db=args.save_db,
+        print_columns=args.print_columns,
     )
+    sys.stdout.write(text)

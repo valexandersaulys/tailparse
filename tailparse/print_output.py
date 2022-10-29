@@ -5,7 +5,7 @@ def print_output(
     list_of_results: List[Tuple[str]], column_names: Optional[List[str]]
 ) -> str:
     """
-    Format the outputs involved:
+    Format the outputs involved
 
     :param list_of_results: a list of tuples where each tuple is a row from a
         SQL query. Required.

@@ -1,9 +1,10 @@
+from io import TextIOWrapper, BytesIO
 import re
 
 from . import nginx
 
 
-def get_regexp_format(input_format: str):
+def get_regexp_format(input_format: str = "nginx"):
     input_format = input_format.lower()
     if input_format == "nginx":
         return nginx.get_regexp_format()
@@ -14,12 +15,18 @@ def get_regexp_format(input_format: str):
         )
 
 
-def convert_text(log_file, input_format):
+def convert_text(
+    log_file: TextIOWrapper = TextIOWrapper(BytesIO(b"")), input_format: str = "nginx"
+):
     regex, type_conversions, dtypes = get_regexp_format(input_format)
     L = []
     for line in log_file.readlines():
         try:
             m = re.match(regex, line)
+            if m is None:
+                raise ValueError(
+                    "Log line did not match format '%s': '%s'" % (input_format, line)
+                )
             tmp_group_dict = m.groupdict()
             # perform conversions if called for
             if type_conversions:
