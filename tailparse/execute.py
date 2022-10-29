@@ -41,6 +41,9 @@ def execute_query(
     if query == "" and query_file == "" and not print_columns:
         raise ValueError("Did not pass in a query or query_file")
 
+    if print_columns:
+        return pp.pformat(dtypes) + "\n"
+
     # dump to SQLite3
     already_exists = False
     if save_db:
@@ -56,9 +59,6 @@ def execute_query(
         curr.execute(table_creation_query)
         curr.executemany(insertion_string, dict_list)
         conn.commit()
-
-    if print_columns:
-        return pp.pformat(dtypes) + "\n"
 
     to_ret = ""
     # execute the passed query
