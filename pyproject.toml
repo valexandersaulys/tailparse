@@ -13,8 +13,10 @@ readme = "README.md"
 requires-python = ">=3.6"
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: GPL License",
     "Operating System :: OS Independent",
+    "Development Status :: 4 - Beta",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Topic :: Internet :: Log Analysis"
 ]
 
 [project.entry-points.console_scripts]
