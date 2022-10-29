@@ -118,7 +118,7 @@ coverage report --omit=*/tests/*
   + [ ] `tailparse.print_output.print_output`: write unit tests
         against this and check for output string
         
-  + [ ] write testing shell script -- should fail if `mypy` fails or
+  + [x] write testing shell script -- should fail if `mypy` fails or
         if `coverage` and `mypy` aren't installed
 
 + [ ] update the README to use current version screenshots
