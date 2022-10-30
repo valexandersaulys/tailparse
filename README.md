@@ -1,4 +1,11 @@
-# `tailparse`
+# Tailparse
+
+[![CodeCov](https://codecov.io/gh/valexandersaulys/tailparse/branch/master/graph/badge.svg)](https://codecov.io/gh/valexandersaulys/tailparse)
+[![MIT License](https://img.shields.io/pypi/l/tailparse)](https://pypi.org/project/tailparse/)
+[![Support Python Versions](https://img.shields.io/pypi/pyversions/tailparse)](https://pypi.org/project/tailparse/)
+[![Wheel Build](https://img.shields.io/pypi/wheel/tailparse)](https://pypi.org/project/tailparse/)
+[![PyPi Version](https://img.shields.io/pypi/v/tailparse)](https://pypi.org/project/tailparse/)
+[![PyPi Version Status](https://img.shields.io/pypi/status/tailparse)](https://pypi.org/project/tailparse/)
 
 Meant to mimic, sort of, how the OG [logparser for MS
 Server](https://en.wikipedia.org/wiki/Logparser) worked. 
