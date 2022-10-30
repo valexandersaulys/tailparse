@@ -10,17 +10,34 @@
 Meant to mimic, sort of, how the OG [logparser for MS
 Server](https://en.wikipedia.org/wiki/Logparser) worked. 
 
-Very much a work-in-progress atm. Goal is to make this a standalone
-python executable for deployment on servers. Will probably have to
-change the name to make space on package repos. 
 
 ## Installation
-
-`tailparse` has no dependencies to install. It only works with
-python 3 and has only been tested in python 3.10. Presumably it would
-work with any python 3. 
+ 
 ```
-python3 setup.py install --user
+$ pip install tailparse
+
+# then check it installed correctly
+$ tailparse --version
+tailparse v0.2
+```
+
+`tailparse` has no dependencies to install. 
+
+See [below](#usage) for examples on how to use.
+
+
+### Other Ways
+
+Other ways to install. 
+```
+git clone https://github.com/valexandersaulys/tailparse
+python setup.py install --user
+
+# or with pip
+pip install git+https://git@github.com/valexandersaulys/tailparse.git#egg=tailparse
+
+# or if you want to actively develop it locally
+python setup.py develop  --user
 ```
 
 This will install it in your home directory
@@ -108,72 +125,37 @@ module](https://coverage.readthedocs.io/en/6.5.0/), you can run:
 ```
 
 While testing relies entirely on `unittest`, which is built-in,
-`coverage` and `mypy` are used to do coverage reports and type
-checking, respectively. `./test.sh` will check for these installs at
-runtime.  
+`coverage` and [`mypy`](https://mypy.readthedocs.org/en/stable/) are
+used to do coverage reports and type checking,
+respectively. `./test.sh` will check for these installs at runtime. 
 
 
 ## Contributing
 
-Feel free to make a PR! 
+Feel free to make a PR. 
 
 Note that this library is trying very hard to avoid any dependencies
 and stay core-python-only. If there is a strong reason to include one,
 please include a reason why.  
 
-`black` is used for all code formatting. Testing will be required for
-any contributions. 
+`black` is used for all code formatting. 
+
+Testing will be required for any contributions. 
 
 
 ## Todos  
   
-+ [ ] write [proper
-      tests](https://docs.python.org/3/library/unittest.html) 
-      
-  + [X] split the `logparser.py` file up into separate chunks 
-  
-  + [ ] `tailparse.execute.execute_query`: write integration tests
-        against this and check for the output string -- _all for 'nginx'_
-        
-    + [x] include `sample.log` via `shuf -n N input > output`
-    + [x] `SELECT * FROM logs LIMIT 1`
-    + [x] `SELECT * FROM logs LIMIT 2`
-    + [x] `SELECT * FROM logs`: stops at 20 by default
-    + [x] `SELECT * FROM logs`, w/max_rows=0: does not stop at 20
-    + [x] `SELECT *`: complains before it executes
-    + [x] w/`query_file`: write to `/tmp` and clean up after
-    + [x] w/`save_db`: write to `/tmp` and clean up after
-    + [x] w/`print_columns`: as `True`, should print just columns
-    
-  + [x] `tailparse.print_output.print_output`: write unit tests
-        against this and check for output string
-        
-  + [x] write testing shell script -- should fail if `mypy` fails or
-        if `coverage` and `mypy` aren't installed
-
-+ [ ] update the README to use current version screenshots
-
-+ [ ] add `--version` argument
-
 + [ ] write proper contribution guides, especially for new log formats
 
 + [ ] write proper `Make` file to make it easy for people to see whats
       going on
 
-+ [x] remove pandas dependency and only use pure python
-
-+ [x] support writing to disk for the sqlite3 database, not just to
-      memory 
-
 + [ ] support other formats, not just Nginx
   + [ ] apache 
   + [ ] [morgan](https://www.npmjs.com/package/morgan)
-
-+ [x] Ability to process multiple SQL commands in a text file,
-      separated by line
       
-+ [ ] infer the table (e.g. `FROM logs`) so I don't have to specify it
-      everytime 
++ [ ] infer the table (e.g. `FROM logs` in the query) so I don't have
+      to specify it everytime 
 
 
 ## License
