@@ -7,7 +7,7 @@ jobs:
       OS: ubuntu-latest
       PYTHON: '3.10'
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v1
       with:
         fetch-depth: '2'
     - name: Setup Python
@@ -19,7 +19,9 @@ jobs:
         pip install coverage mypy
         mypy tailparse
         coverage run -m unittest
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
-      ignore:
-        - "*/tests/*"
+    - name: Upload Code Coverage Reports to Codecov
+      run: |
+        curl -Os https://uploader.codecov.io/latest/linux/codecov
+        chmod +x codecov
+        ./codecov
+        
