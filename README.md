@@ -143,19 +143,36 @@ please include a reason why.
 Testing will be required for any contributions. 
 
 
-## Todos  
+## Future Features / Roadmap
+
+(In no particular order)
+
++ [ ] refactor regexp maker to be a class that other ones inherit from
+  + functional programming is a bit preferred but an object would
+    guarantee uniformity in how new ones get implemented. 
   
 + [ ] write proper contribution guides, especially for new log formats
-
-+ [ ] write proper `Make` file to make it easy for people to see whats
-      going on
 
 + [ ] support other formats, not just Nginx
   + [ ] apache 
   + [ ] [morgan](https://www.npmjs.com/package/morgan)
       
++ [ ] parse log name into table name, allow for multiple logs to be
+      parsed and queried against
+      
++ [ ] add universal configuration file
+  + creates default tables from existing log files (e.g. nginx access
+    logs, systemd logs) 
+
++ [ ] write test to confirm mismatched logs are ignored
+
++ [ ] write parser to understand `Key=Value` pairs in a log
+  + example: `Ip=192.168.0.1 timeToGet=38s user=JohnnyBoy198`
+      
 + [ ] infer the table (e.g. `FROM logs` in the query) so I don't have
       to specify it everytime 
+      
++ [ ] add option to convert to JSON for viewing in chrome consoles
 
 
 ## License
